@@ -6,7 +6,6 @@ from __future__ import unicode_literals
 import io
 import logging
 import os
-from tqdm import tqdm
 
 import typing
 from typing import List, Text, Any, Optional, Dict
@@ -412,10 +411,11 @@ class EmbeddingIntentClassifier(Component):
             logger.info("Accuracy is updated every {} epochs"
                         "".format(self.evaluate_every_num_epochs))
 
-        pbar = tqdm(range(self.epochs), desc="Epochs")
         train_acc = 0
         last_loss = 0
-        for ep in pbar:
+        for ep in range(self.epochs):
+            logger.info("Training epoch {} "
+                        "out of {}".format(ep + 1, len(self.epochs)))
             indices = np.random.permutation(len(X))
 
             batch_size = self._linearly_increasing_batch_size(ep)
