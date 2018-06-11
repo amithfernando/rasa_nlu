@@ -414,8 +414,6 @@ class EmbeddingIntentClassifier(Component):
         train_acc = 0
         last_loss = 0
         for ep in range(self.epochs):
-            logger.info("Training epoch {} "
-                        "out of {}".format(ep + 1, len(self.epochs)))
             indices = np.random.permutation(len(X))
 
             batch_size = self._linearly_increasing_batch_size(ep)
@@ -448,14 +446,13 @@ class EmbeddingIntentClassifier(Component):
                                                            is_training)
                     last_loss = ep_loss
 
-                pbar.set_postfix({
-                    "loss": "{:.3f}".format(ep_loss),
-                    "acc": "{:.3f}".format(train_acc)
-                })
+                postfix = "loss: {:.3f} - " \
+                          "acc: {:.3f}".format(ep_loss, train_acc)
             else:
-                pbar.set_postfix({
-                    "loss": "{:.3f}".format(ep_loss)
-                })
+                postfix = "loss: {:.3f}".format(ep_loss)
+
+            logger.info("Trained epoch {} "
+                        "out of {} {}".format(ep + 1, self.epochs, postfix))
 
         if self.evaluate_on_num_examples:
             logger.info("Finished training embedding policy, "
