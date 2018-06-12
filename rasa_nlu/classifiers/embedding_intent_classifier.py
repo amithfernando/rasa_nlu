@@ -500,6 +500,7 @@ class EmbeddingIntentClassifier(Component):
         self.num_neg = min(self.num_neg,
                            self.encoded_all_intents.shape[0] - 1)
 
+        tf.reset_default_graph()
         self.graph = tf.Graph()
         with self.graph.as_default():
             self.a_in = tf.placeholder(tf.float32, (None, X.shape[-1]),
